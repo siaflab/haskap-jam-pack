@@ -7,7 +7,7 @@ Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). Th
 * Robot Voice
 * Log forwarding
 
-This project is originally started by @keikomachiya as a stand alone application named "Hascap Jam Pi" in 2015 and re-wrote as an extension package by @kn1kn1.
+This project is originally started by @keikomachiya as a stand alone application named "Hascap Jam Pi" in 2015 and re-written as an extension package by @kn1kn1.
 
 ## Requirements
 Sonic Pi v2.9
