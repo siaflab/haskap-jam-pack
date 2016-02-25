@@ -19,14 +19,14 @@ Download zip file from SIAF LAB site and extract it.
 ### Configuration
 #### Server
 Set the server listening port and Sonic Pi listening port in haskap-jam-server-config.json.
-```
-receivePort: <server listening port>,
-socicPiPort: <Sonic Pi listening port>(default: 4557)
+```json
+"receivePort": <server listening port>,
+"socicPiPort": <Sonic Pi listening port>(default: 4557)
 ```
 
 #### Client
 Set the server IP address and listening port in haskap-jam-config.rb.
-```
+```rb
 remote_address: '<server IP address>',
 remote_port: <server listening port>,
 ```
@@ -36,7 +36,7 @@ remote_port: <server listening port>,
 * Open Sonic Pi.
 * Start haskap-jam-server.
 
-```
+```sh
 $ cd server/jam-server; ./bin/darwin_amd64/haskap-jam-server
 config.ReceivePort: 4559
 config.SocicPiPort: 4557
@@ -53,7 +53,7 @@ and will send to udp 4557
 * Open Sonic Pi.
 * Include `load "[path to haskap-jam-loop.rb]/haskap-jam-loop.rb"` in the code and use `jam_loop` instead of `live_loop`.
 
-```
+```ruby
 load "~/haskap-jam-pack/client/haskap-jam-loop.rb"
 
 jam_loop :test do
@@ -69,7 +69,7 @@ end
 * Open Sonic Pi.
 * Include `load "[path to haskap-jam-voice.rb]/haskap-jam-voice.rb"` in the code and use "voice" command.
 
-```
+```ruby
 load "~/haskap-jam-pack/client/haskap-jam-voice.rb"
 
 // c4 with "do"
@@ -78,7 +78,7 @@ voice "do", :c4
 
 You can also play with "voice_pattern" or "voice_pattern_timed" command and specify chord or scale as a note argument.
 
-```
+```ruby
 load "~/haskap-jam-pack/client/haskap-jam-voice.rb"
 
 voice "ra", chord(:E3, :minor)
@@ -115,7 +115,7 @@ Following syllables can be specified as argument.
 ### Configuration
 Configure the following settings in haskap-jam-interceptor-config.json.
 
-```
+```json
 "deviceName": <local machine loopback device name>(default: "lo0")
 "receivePort": <Sonic Pi GUI listening port>(default: 4558),
 "sendToAddress": <remote ip address>(default: "127.0.0.1"),
@@ -126,7 +126,7 @@ Configure the following settings in haskap-jam-interceptor-config.json.
 * Open Sonic Pi.
 * Start haskap-jam-interceptor.
 
-```
+```sh
 $ cd server/log-interceptor; ./bin/darwin_amd64/haskap-jam-interceptor
 config.DeviceName: lo0
 config.ReceivePort: 4558
