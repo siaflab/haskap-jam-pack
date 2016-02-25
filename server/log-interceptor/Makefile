@@ -5,14 +5,14 @@ all:
 
 .PHONY: run
 run:
-	go run haskap-jam-interceptor.go
+	./run.sh
 
 .PHONY: test
 test:
 	gofmt -w .
 	test -z "$(gofmt -s -l . | tee /dev/stderr)"
 	test -z "$($GOPATH/bin/golint ./... | tee /dev/stderr)"
-	go test
+	./test.sh
 
 .PHONY: clean
 clean:
