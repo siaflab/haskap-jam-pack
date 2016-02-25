@@ -28,7 +28,9 @@ THE SOFTWARE.
 (contents of client/voice/)
 
 All the bundled voice samples are licensed to @amitaro_utau.
+
 Copyright(C) 1997 - 2016 あみたろ All Rights Reserved.
+
 http://www14.big.or.jp/~amiami/happy/utau/licence01.html
 
 ## Bundled Software
@@ -39,6 +41,7 @@ relevant licenses:
 ### [GoPacket](https://github.com/google/gopacket)
 
 Copyright (c) 2012 Google, Inc. All rights reserved.
+
 Copyright (c) 2009-2011 Andreas Krennmair. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
