@@ -1,0 +1,6 @@
+{
+  "deviceName": "lo0",
+  "receivePort": 4558,
+  "sendToAddress": "127.0.0.1",
+  "sendToPort": 3333
+}
