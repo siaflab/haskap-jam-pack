@@ -1,7 +1,10 @@
 #!/bin/sh
 
 echo $GOPATH
-gpath=$GOPATH
+go_path=$GOPATH
 
 go get github.com/google/gopacket
-sudo GOPATH=$gpath go test
+
+go_cmd=`which go`
+echo $go_cmd
+sudo GOPATH=$go_path $go_cmd test

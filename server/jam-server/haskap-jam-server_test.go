@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+var c chan int
+
 // TestServer represents a server process.
 type TestServer struct {
 	ReceivePort    int
@@ -26,7 +28,8 @@ func (server *TestServer) Start() {
 
 	printTestServerStartedMessage(server.ReceivePort)
 
-	var sem = make(chan int, 1)
+	c = make(chan int)
+	recievCount := 0
 	for {
 		if server.rcvConn == nil {
 			break
@@ -38,12 +41,11 @@ func (server *TestServer) Start() {
 			continue
 		}
 
-		go func(b []byte) {
-			printTestServerReceivedMessage(rcvFromAddr, string(b))
-			sem <- 1
-			server.ReceiveMsgList.PushBack(b)
-			<-sem
-		}(buf[:n])
+		b := buf[:n]
+		printTestServerReceivedMessage(rcvFromAddr, string(b))
+		server.ReceiveMsgList.PushBack(b)
+		recievCount++
+		c <- recievCount
 	}
 }
 
@@ -129,7 +131,12 @@ func TestSend1Message(t *testing.T) {
 	testSndConn.Write(sendBytes)
 
 	//// assert
-	time.Sleep(50 * time.Millisecond)
+	for {
+		receiveCount := <-c
+		if receiveCount >= 1 {
+			break
+		}
+	}
 	listLen := testServer.ReceiveMsgList.Len()
 	if listLen != 1 {
 		t.Errorf("%q - Expected %q, actual %q", "testServer.ReceiveMsgList.Len()", 1, listLen)
@@ -158,7 +165,12 @@ func TestSend2Message(t *testing.T) {
 	testSndConn.Write(sendBytes2)
 
 	//// assert
-	time.Sleep(50 * time.Millisecond)
+	for {
+		receiveCount := <-c
+		if receiveCount >= 2 {
+			break
+		}
+	}
 	listLen := testServer.ReceiveMsgList.Len()
 	if listLen != 2 {
 		t.Errorf("%q - Expected %q, actual %q", "testServer.ReceiveMsgList.Len()", 2, listLen)
@@ -191,7 +203,12 @@ func TestSend2MessageSimul(t *testing.T) {
 	go testSndConn.Write(sendBytes2)
 
 	//// assert
-	time.Sleep(50 * time.Millisecond)
+	for {
+		receiveCount := <-c
+		if receiveCount >= 2 {
+			break
+		}
+	}
 	listLen := testServer.ReceiveMsgList.Len()
 	if listLen != 2 {
 		t.Errorf("%q - Expected %q, actual %q", "testServer.ReceiveMsgList.Len()", 2, listLen)
@@ -234,10 +251,15 @@ end`
 	}
 
 	//// assert
-	time.Sleep(50 * time.Millisecond)
+	for {
+		receiveCount := <-c
+		if receiveCount >= msgNum {
+			break
+		}
+	}
 	listLen := testServer.ReceiveMsgList.Len()
 	if listLen != msgNum {
-		t.Errorf("%q - Expected %q, actual %q", "testServer.ReceiveMsgList.Len()", 1, listLen)
+		t.Errorf("%q - Expected %d, actual %d", "testServer.ReceiveMsgList.Len()", msgNum, listLen)
 	}
 
 	for e := sendMsgList.Front(); e != nil; e = e.Next() {
@@ -273,7 +295,12 @@ func TestSend9216byte(t *testing.T) {
 	testSndConn.Write(sendBytes)
 
 	//// assert
-	time.Sleep(50 * time.Millisecond)
+	for {
+		receiveCount := <-c
+		if receiveCount >= 1 {
+			break
+		}
+	}
 	listLen := testServer.ReceiveMsgList.Len()
 	if listLen != 1 {
 		t.Errorf("%q - Expected %q, actual %q", "testServer.ReceiveMsgList.Len()", 1, listLen)

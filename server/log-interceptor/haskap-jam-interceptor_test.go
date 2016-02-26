@@ -5,10 +5,13 @@ import (
 	"container/list"
 	"fmt"
 	"net"
+	"runtime"
 	"strconv"
 	"testing"
 	"time"
 )
+
+var c chan int
 
 // TestServer represents a server process.
 type TestServer struct {
@@ -26,7 +29,8 @@ func (server *TestServer) Start() {
 
 	printTestServerStartedMessage(server.ReceivePort)
 
-	var sem = make(chan int, 1)
+	c = make(chan int)
+	receiveCount := 0
 	for {
 		if server.rcvConn == nil {
 			break
@@ -38,12 +42,11 @@ func (server *TestServer) Start() {
 			continue
 		}
 
-		go func(b []byte) {
-			printTestServerReceivedMessage(rcvFromAddr, string(b))
-			sem <- 1
-			server.ReceiveMsgList.PushBack(b)
-			<-sem
-		}(buf[:n])
+		b := buf[:n]
+		printTestServerReceivedMessage(rcvFromAddr, string(b))
+		server.ReceiveMsgList.PushBack(b)
+		receiveCount++
+		c <- receiveCount
 	}
 }
 
@@ -103,7 +106,13 @@ func setup() (*TestServer, *Interceptor, *net.UDPConn) {
 	go testServer.Start()
 	time.Sleep(50 * time.Millisecond)
 
-	deviceName := "lo0"
+	// WORKAROUND for travis
+	var deviceName string
+	if runtime.GOOS == "darwin" {
+		deviceName = "lo0" // osx
+	} else {
+		deviceName = "lo" // travis
+	}
 	rcvPort, sndPort := 4558, 3333
 	sndAddress := "127.0.0.1"
 	server := &Interceptor{deviceName, rcvPort, sndAddress, sndPort, nil}
@@ -139,7 +148,12 @@ func TestSend1Message(t *testing.T) {
 	testSndConn.Write(sendBytes)
 
 	//// assert
-	time.Sleep(50 * time.Millisecond)
+	for {
+		receiveCount := <-c
+		if receiveCount >= 1 {
+			break
+		}
+	}
 	listLen := testServer.ReceiveMsgList.Len()
 	if listLen != 1 {
 		t.Errorf("%q - Expected %q, actual %q", "testServer.ReceiveMsgList.Len()", 1, listLen)

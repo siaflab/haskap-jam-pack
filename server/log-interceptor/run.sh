@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo $GOPATH
-gpath=$GOPATH
+go_path=$GOPATH
 
 go get github.com/google/gopacket
-sudo GOPATH=$gpath go run haskap-jam-interceptor.go
+sudo GOPATH=$go_path go run haskap-jam-interceptor.go
