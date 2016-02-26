@@ -140,3 +140,7 @@ capturing UDP port 4558 packets.
 and will send to 127.0.0.1:3333
 #####
 ```
+
+## Build Status
+
+[![Travis CI](https://api.travis-ci.org/kn1kn1/haskap-jam-pack.svg)](https://travis-ci.org/kn1kn1/haskap-jam-pack)
