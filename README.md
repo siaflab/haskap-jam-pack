@@ -36,17 +36,44 @@ remote_port: <server listening port>,
 * Open Sonic Pi.
 * Start haskap-jam-server.
 
+```
+Usage of haskap-jam-server:
+  -d	print debug output
+  -debug
+    	print debug output
+  -v	show version
+  -version
+    	show version
+```
+
+You may find `-d` or `-debug` option useful when you use this command for the first time.
+
 ```sh
-$ cd server/jam-server; ./bin/darwin_amd64/haskap-jam-server
+$ cd server/jam-server; ./bin/darwin_amd64/haskap-jam-server -d
 config.ReceivePort: 4559
 config.SocicPiPort: 4557
 #####
-2016-02-25 14:09:23.080256492 +0900 JST
+2016-02-27 12:15:01.93834047 +0900 JST
 haskap-jam-server started successfully.
-version: 0.1.0, build: , date:2016-02-25T12:19:24+0900
+version: 0.1.0-alpha1, build: 06f72ff, date:2016-02-25T16:10:43+0900
 listening to udp 4559
 and will send to udp 4557
 #####
+-----
+2016-02-27 12:17:30.767371905 +0900 JST
+Received from: 127.0.0.1:56826
+size: 176
+# Welcome to Sonic Pi v2.9
+
+#load "~/github/haskap-jam-pack/client/haskap-jam-loop.rb"
+
+jam_loop :test do
+sample :perc_bell, rate: rrand(-1.5, 1.5)
+sleep rrand(0.1, 2)
+stop
+end
+
+(snip)
 ```
 
 #### Client
@@ -126,17 +153,53 @@ Configure the following settings in haskap-jam-interceptor-config.json.
 * Open Sonic Pi.
 * Start haskap-jam-interceptor.
 
+```
+Usage of haskap-jam-interceptor:
+  -d	print debug output
+  -debug
+    	print debug output
+  -v	show version
+  -version
+    	show version
+```
+
+You may find `-d` or `-debug` option useful when you use this command for the first time.
+
+Please notice that `sudo` may be required to access the loopback device.
+
 ```sh
-$ cd server/log-interceptor; ./bin/darwin_amd64/haskap-jam-interceptor
+$ cd server/log-interceptor; sudo ./bin/darwin_amd64/haskap-jam-interceptor -d
+Password:
 config.DeviceName: lo0
 config.ReceivePort: 4558
 config.SendToAddress: 127.0.0.1
 config.SendToPort: 3333
 #####
-2016-02-25 14:00:47.627896987 +0900 JST
+2016-02-27 12:05:53.371452368 +0900 JST
 haskap-jam-interceptor started successfully.
-version: 0.1.0, build: , date:2016-02-25T12:19:12+0900
+version: 0.1.0-alpha1, build: 06f72ff, date:2016-02-25T16:10:39+0900
 capturing UDP port 4558 packets.
 and will send to 127.0.0.1:3333
 #####
+-----
+IPv4 layer detected.
+From 127.0.0.1 to 127.0.0.1
+Protocol:  UDP
+
+All packet layers:
+-  Loopback
+-  IPv4
+-  UDP
+-  Payload
+UDP layer detected.
+Application layer/Payload found.
+/info,sWelcome to Sonic Pi
+-----
+IPv4 layer detected.
+From 127.0.0.1 to 127.0.0.1
+Protocol:  UDP
+
+All packet layers:
+
+(snip)
 ```
