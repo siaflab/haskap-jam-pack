@@ -1,6 +1,8 @@
-# Sonic Pi Haskap Jam Pack
+# Haskap Jam Pack
 
 ## Introduction
+<img src="haskap.png" alt="Haskap painting" title="Haskap" align="right" />
+
 Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). This package adds the following three features to Sonic Pi.
 
 * Jam Session
@@ -13,7 +15,7 @@ This project is originally started by @keikomachiya as a stand alone application
 Sonic Pi v2.9
 
 ## Installation
-Download zip file from SIAF LAB site and extract it.
+Download zip file from [SIAF LAB](http://www.sapporo-internationalartfestival.jp/siaflab/sonic-jam-pi/) site and extract it.
 
 ## Jam Session
 ### Configuration
