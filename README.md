@@ -1,8 +1,7 @@
 # Haskap Jam Pack
-
-## Introduction
 <img src="haskap.png" alt="Haskap painting" title="Haskap" align="right" />
 
+## Introduction
 Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). This package adds the following three features to Sonic Pi.
 
 * Jam Session
@@ -168,6 +167,8 @@ Usage of haskap-jam-interceptor:
 You may find `-d` or `-debug` option useful when you use this command for the first time.
 
 Please notice that `sudo` may be required to access the loopback device.
+
+Due to complications of cross-compling C-based libpcap, binaries of other than darwin_amd64 platform are not currently published. If you want to use the haskap-jam-interceptor on other platform, please refer to [this document](https://github.com/siaflab/haskap-jam-pack/blob/master/server/log-interceptor/RUN-WITH-GO.md) for more detailed instructions to run manually with Go.
 
 ```sh
 $ cd server/log-interceptor; sudo ./bin/darwin_amd64/haskap-jam-interceptor -d
