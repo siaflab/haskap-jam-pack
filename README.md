@@ -206,7 +206,3 @@ All packet layers:
 
 (snip)
 ```
-
-## Build Status
-
-[![Travis CI](https://api.travis-ci.org/kn1kn1/haskap-jam-pack.svg)](https://travis-ci.org/kn1kn1/haskap-jam-pack)
