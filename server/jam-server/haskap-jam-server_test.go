@@ -41,11 +41,13 @@ func (server *TestServer) Start() {
 			continue
 		}
 
-		b := buf[:n]
-		printTestServerReceivedMessage(rcvFromAddr, string(b))
-		server.ReceiveMsgList.PushBack(b)
-		recievCount++
-		c <- recievCount
+		go func(buffer []byte, n int) {
+			b := buffer[:n]
+			printTestServerReceivedMessage(rcvFromAddr, string(b))
+			server.ReceiveMsgList.PushBack(b)
+			recievCount++
+			c <- recievCount
+		}(buf, n)
 	}
 }
 
@@ -225,12 +227,12 @@ func TestSend2MessageSimul(t *testing.T) {
 	teardown(testServer, server, testSndConn)
 }
 
-func TestSend200MessageSimul(t *testing.T) {
+func TestSend20MessageSimul(t *testing.T) {
 	//// setup
 	testServer, server, testSndConn := setup()
 
 	//// test
-	const msgNum = 200
+	const msgNum = 20
 	const codeMsg = `# Welcome to Sonic Pi v2.9
 
 #load "~/github/haskap-jam-pack/client/haskap-jam-loop.rb"
@@ -242,17 +244,20 @@ stop
 end`
 	sendMsgList := list.New()
 	for i := 0; i < msgNum; i++ {
+
 		go func(idx int) {
 			sendBytes := []byte(codeMsg)
 			strconv.AppendInt(sendBytes, int64(idx), 10)
 			testSndConn.Write(sendBytes)
 			sendMsgList.PushBack(sendBytes)
+			fmt.Println("Sent:", idx)
 		}(i)
 	}
 
 	//// assert
 	for {
 		receiveCount := <-c
+		fmt.Println("Recept:", receiveCount)
 		if receiveCount >= msgNum {
 			break
 		}
