@@ -227,12 +227,12 @@ func TestSend2MessageSimul(t *testing.T) {
 	teardown(testServer, server, testSndConn)
 }
 
-func TestSend20MessageSimul(t *testing.T) {
+func TestSend10MessageSimul(t *testing.T) {
 	//// setup
 	testServer, server, testSndConn := setup()
 
 	//// test
-	const msgNum = 20
+	const msgNum = 10
 	const codeMsg = `# Welcome to Sonic Pi v2.9
 
 #load "~/github/haskap-jam-pack/client/haskap-jam-loop.rb"
