@@ -81,16 +81,16 @@ module HaskapJamLoop
     end
 
     def extract_workspace_id(source_file_name)
-      # source_file_name: "Workspace 0"
-      matched = source_file_name.match(/([a-zA-Z]|\s)?(\d)/)
+      # source_file_name: "Workspace_one"
+      matched = source_file_name.match(/([a-zA-Z]|\s)?_([a-zA-Z]*)$/)
       if matched.nil? || matched[2].nil?
         msg = "source_file_name not matched. source_file_name: #{source_file_name}"
         log_error msg
         fail msg
       end
-      workspace_id = matched[2]
+      workspace_id = matched[2] # one
       log_debug("workspace_id: #{workspace_id}")
-      workspace_id.to_i
+      workspace_id
     end
 
     def workspace_filepath(workspace_id)
@@ -114,8 +114,8 @@ module HaskapJamLoop
     end
 
     def workspace_filename(workspace_id)
-      # workspace_id: 0-9
-      'workspace_' + number_name(workspace_id.to_i) + '.spi'
+      # workspace_id: zero, one, ... nine
+      'workspace_' + workspace_id + '.spi'
     end
 
     def number_name(i)
