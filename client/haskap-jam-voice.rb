@@ -56,7 +56,7 @@ def voice(syllable, n, *args)
 
   file_base = File.dirname(__FILE__) + '/voice/voice_'
   wav_file_path = "#{file_base}#{syllable}.wav"
-  buf_info = load_sample wav_file_path
+  load_sample wav_file_path
 
   args_h = resolve_synth_opts_hash_or_array(args)
   if args_h.empty?
@@ -71,5 +71,5 @@ def voice(syllable, n, *args)
   end
 
   ensure_good_timing!
-  trigger_sampler wav_file_path, buf_info.id, buf_info.num_chans, args_h
+  trigger_sampler wav_file_path, args_h
 end
