@@ -1,0 +1,6 @@
+#RP5_HOME: "" # windoes users should set this
+#PROCESSING_ROOT: "/usr/share/processing"  # Works for ArchLinux
+#PROCESSING_ROOT: "/home/tux/processing-2.2.1"  # Other linux distros with user tux
+#PROCESSING_ROOT: "/Applications/Processing.app/Contents/Java"  # Path for Mac
+PROCESSING_ROOT: "/Applications/Processing2.2.1.app/Contents/Java"  # Path for Mac
+#PROCESSING_ROOT: "C:\Java\processing-2.2.1"   # if you follow PhiLhos suggestion for windoes

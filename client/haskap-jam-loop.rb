@@ -24,148 +24,30 @@
 # require_relative 'oscencode'
 # require_relative 'udp_client'
 
-$log_level = :debug
+load File.expand_path(File.dirname(__FILE__) + '/haskap-jam-util.rb')
+include HaskapJam::Log
+include HaskapJam::Util
+set_log_level :debug
 
-module HaskapJamLoop
-  module Log
-    extend self
-
-    LOGLEVEL_DEBUG = 0 unless defined?(LOGLEVEL_DEBUG)
-    LOGLEVEL_INFO = 1 unless defined?(LOGLEVEL_INFO)
-    LOGLEVEL_WARN = 2 unless defined?(LOGLEVEL_WARN)
-    LOGLEVEL_ERROR = 3 unless defined?(LOGLEVEL_ERROR)
-    LOGLEVEL_FATAL = 4 unless defined?(LOGLEVEL_FATAL)
-    LOGLEVEL_MAP = { debug: LOGLEVEL_DEBUG, info: LOGLEVEL_INFO,
-                     warn: LOGLEVEL_WARN, error: LOGLEVEL_ERROR,
-                     fatal: LOGLEVEL_FATAL }.freeze unless defined?(LOGLEVEL_MAP)
-
-    @@log_level = LOGLEVEL_MAP[$log_level]
-
-    def log_debug(msg)
-      return if @@log_level > LOGLEVEL_DEBUG
-      log_path = SonicPi::Util.log_path
-      File.open("#{log_path}/debug.log", 'a') do |f|
-        f.write("[#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}|haskap-jam] #{msg}\n")
-      end
-    end
-
-    def log_info(msg)
-      return if @@log_level > LOGLEVEL_INFO
-      puts "[#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}|haskap-jam] #{msg}"
-    end
-
-    def log_error(msg)
-      return if @@log_level > LOGLEVEL_ERROR
-      STDERR.puts "[#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}|haskap-jam] #{msg}"
-    end
+def local_address
+  udp = UDPSocket.new
+  udp.connect('128.0.0.0', 7)
+  local_addr = Socket.unpack_sockaddr_in(udp.getsockname)[1]
+  udp.close
+  log_debug "local_address: #{local_addr}"
+  if local_addr.nil? || local_addr.empty?
+    msg = 'local_addr is nil or empty!'
+    log_error msg
+    fail msg
   end
+  local_addr
+end
 
-  module Util
-    extend self
-    include HaskapJamLoop::Log
-
-    NUMBER_NAMES = %w(zero one two three four five six
-                      seven eight nine).freeze unless defined?(NUMBER_NAMES)
-
-    def read_workspace(workspace_id)
-      workspace_file_path = workspace_filepath(workspace_id)
-      log_debug "workspace_file_path: #{workspace_file_path}"
-      code = read_file(workspace_file_path, 5)
-      log_debug "code: #{code}"
-      if code.nil? || code.empty?
-        msg = 'code is nil or empty!'
-        log_error msg
-        fail msg
-      end
-      code
-    end
-
-    def extract_workspace_id(source_file_name)
-      # source_file_name: "Workspace_one"
-      matched = source_file_name.match(/([a-zA-Z]|\s)?_([a-zA-Z]*)$/)
-      if matched.nil? || matched[2].nil?
-        msg = "source_file_name not matched. source_file_name: #{source_file_name}"
-        log_error msg
-        fail msg
-      end
-      workspace_id = matched[2] # one
-      log_debug("workspace_id: #{workspace_id}")
-      workspace_id
-    end
-
-    def workspace_filepath(workspace_id)
-      file_name = workspace_filename(workspace_id)
-      log_debug "file_name: #{file_name}"
-      if file_name.nil? || file_name.empty?
-        msg = 'file_name is nil or empty!'
-        log_error msg
-        fail msg
-      end
-
-      project_path = SonicPi::Util.project_path
-      log_debug "project_path: #{project_path}"
-      if project_path.nil? || project_path.empty?
-        msg = 'project_path is nil or empty!'
-        log_error msg
-        fail msg
-      end
-
-      project_path + file_name
-    end
-
-    def workspace_filename(workspace_id)
-      # workspace_id: zero, one, ... nine
-      'workspace_' + workspace_id + '.spi'
-    end
-
-    def number_name(i)
-      if i < 0
-        msg = "can not convert to number name: #{i}"
-        log_error msg
-        fail msg
-      end
-      name = NUMBER_NAMES.fetch(i, nil)
-      if name.nil?
-        msg = "can not convert to number name: #{i}"
-        log_error msg
-        fail msg
-      end
-      name
-    end
-
-    def read_file(file_path, max_retry)
-      code = nil
-      rep = 1
-      while code.nil? || code.empty? || rep < max_retry
-        code = File.read(file_path)
-        rep += 1
-      end
-      code
-    end
-
-    def local_address
-      udp = UDPSocket.new
-      udp.connect('128.0.0.0', 7)
-      local_addr = Socket.unpack_sockaddr_in(udp.getsockname)[1]
-      udp.close
-      log_debug "local_address: #{local_addr}"
-      if local_addr.nil? || local_addr.empty?
-        msg = 'local_addr is nil or empty!'
-        log_error msg
-        fail msg
-      end
-      local_addr
-    end
-
-    def fetch(hash, key, default)
-      (hash.nil? || hash[key].nil?) ? default : hash[key]
-    end
-  end
+def fetch(hash, key, default)
+  (hash.nil? || hash[key].nil?) ? default : hash[key]
 end
 
 # entry point
-include HaskapJamLoop::Log
-include HaskapJamLoop::Util
 $jam_loop_invoked = false
 def jam_loop(_loop_symbol, &proc)
   return if $jam_loop_invoked

@@ -4,9 +4,10 @@
 ## Introduction
 Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). This package adds the following three features to Sonic Pi.
 
-* Jam Session
-* Robot Voice
-* Log forwarding
+* jam session
+* robot voice
+* log forwarding
+* ruby-processing (experimental)
 
 This project is originally started at [SIAF LAB](http://www.sapporo-internationalartfestival.jp/siaflab/sonic-jam-pi/) by @keikomachiya as a stand alone application named "Hascap Jam Pi" in 2015 and re-written as an extension package by @kn1kn1.
 
@@ -16,7 +17,7 @@ Sonic Pi v2.10
 ## Installation
 Download zip file from [Release Page](https://github.com/siaflab/haskap-jam-pack/releases/) and extract it.
 
-## Jam Session
+## jam session
 ### Configuration
 #### Server
 Set the server listening port and Sonic Pi listening port in haskap-jam-server-config.json.
@@ -92,7 +93,7 @@ end
 ```
 * Run the code!
 
-## Robot Voice
+## robot voice
 ### Usage
 * Open Sonic Pi.
 * Include `load "[path to haskap-jam-voice.rb]/haskap-jam-voice.rb"` in the code and use "voice" command.
@@ -136,9 +137,9 @@ Following syllables can be specified as argument.
 "ta","te","thi","tho","thu","ti","to","tu","u","ua","ue","ugu","ui","uo","uu",
 "va","ve","vi","vo","vu","wa","wo","ya","yo","yu","za","ze","zo","zu","zua","zue","zui","zuo"
 
-## Log forwarding
+## log forwarding
 
-"Log forwarding" feature enables you to send Sonic Pi's log messages to other visual applications. You can easily interact with applications made with Processing, Pure Data, vvvv and openFrameworks, if they are coded to receive OSC messages.
+"log forwarding" feature enables you to send Sonic Pi's log messages to other visual applications. You can easily interact with applications made with Processing, Pure Data, vvvv and openFrameworks, if they are coded to receive OSC messages.
 
 ### Configuration
 Configure the following settings in haskap-jam-interceptor-config.json.
@@ -206,3 +207,7 @@ All packet layers:
 
 (snip)
 ```
+
+## ruby-processing (experimental)
+
+please refer to [this document](https://github.com/siaflab/haskap-jam-pack/blob/master/client/haskap-jam-p5/README.md)
