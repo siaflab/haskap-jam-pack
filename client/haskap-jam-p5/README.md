@@ -107,7 +107,7 @@ end
 ```
 
 #### Stop
-Add `stop_rp5_sketch` and reemove `rp5_sketch`.
+Add `stop_rp5_sketch` and remove `rp5_sketch`.
 
 ```ruby
 live_loop :sketch do

@@ -210,4 +210,4 @@ All packet layers:
 
 ## ruby-processing (experimental)
 
-please refer to [this document](https://github.com/siaflab/haskap-jam-pack/blob/master/client/haskap-jam-p5/README.md)
+Please refer to [this document](https://github.com/siaflab/haskap-jam-pack/blob/master/client/haskap-jam-p5/README.md)
