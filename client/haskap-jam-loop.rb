@@ -25,6 +25,8 @@
 # require_relative 'udp_client'
 
 load File.expand_path(File.dirname(__FILE__) + '/haskap-jam-util.rb')
+load File.expand_path(File.dirname(__FILE__) + '/tcp_client.rb')
+
 include HaskapJam::Log
 include HaskapJam::Util
 set_log_level :debug
@@ -82,8 +84,8 @@ def jam_loop(_loop_symbol, &proc)
 
   # send code to remote sonic pi
   if $jam_loop_client.nil?
-    puts 'creating UDPClient...'
-    client = SonicPi::OSC::UDPClient.new(remote_address, remote_port, use_encoder_cache: true)
+    puts 'creating TCPClient...'
+    client = HaskapJam::OSC::TCPClient.new(remote_address, remote_port, use_encoder_cache: true)
     $jam_loop_client = client
   else
     client = $jam_loop_client
@@ -95,4 +97,5 @@ def jam_loop(_loop_symbol, &proc)
   workspace = "haskap-workspace-#{local_addr}-#{workspace_id}"
   log_debug "workspace: #{workspace}"
   client.send('/save-and-run-buffer', client_id, buffer_id, remote_code, workspace)
+  client.close
 end

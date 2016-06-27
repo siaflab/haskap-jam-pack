@@ -97,63 +97,70 @@ func readConfig() (int, int) {
 type PassthroughServer struct {
 	ReceivePort int
 	SendPort    int
-	rcvConn     *net.UDPConn
+	rcvListener *net.TCPListener
 	sndConn     *net.UDPConn
 }
 
 // Start starts listening.
 func (server *PassthroughServer) Start() {
-	server.rcvConn = prepareReceiveConnection(server.ReceivePort)
-	defer server.rcvConn.Close()
-
 	server.sndConn = prepareSendConnection(server.SendPort)
 	defer server.sndConn.Close()
+
+	rcvAddr, err := net.ResolveTCPAddr("tcp", ":"+strconv.Itoa(server.ReceivePort)) // from any address at specified port
+	handleError(err)
+	server.rcvListener, err = net.ListenTCP("tcp", rcvAddr)
+	handleError(err)
 
 	printStartedMessage(server.ReceivePort, server.SendPort)
 
 	var sem = make(chan int, maxOutstanding)
 	for {
-		if server.rcvConn == nil || server.sndConn == nil {
+		if server.rcvListener == nil || server.sndConn == nil {
 			break
 		}
-		buf := make([]byte, bufferLen)
-		n, rcvFromAddr, err := server.rcvConn.ReadFromUDP(buf)
-		if err != nil {
-			fmt.Println("Error:", err)
+
+		conn, err := server.rcvListener.Accept()
+		if err != nil || conn == nil {
 			continue
 		}
 
-		go func(buffer []byte, n int) {
-			b := buffer[:n]
+		go func(conn net.Conn) {
+			defer conn.Close()
+			err := conn.SetDeadline(time.Now().Add(5 * time.Second))
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
+
+			buf := make([]byte, bufferLen)
+			n, err := conn.Read(buf)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
+
+			b := buf[:n]
 			sem <- 1
-			printReceivedMessage(rcvFromAddr, n, string(b))
+			printReceivedMessage(conn.RemoteAddr(), n, string(b))
 			n, err = server.sndConn.Write(b)
 			if err != nil {
 				fmt.Println("Error:", err)
 			}
 			<-sem
-		}(buf, n)
+		}(conn)
 	}
 }
 
 // Stop stops listening.
 func (server *PassthroughServer) Stop() {
 	defer func() {
-		server.rcvConn.Close()
-		server.rcvConn = nil
+		server.rcvListener.Close()
+		server.rcvListener = nil
 	}()
 	defer func() {
 		server.sndConn.Close()
 		server.sndConn = nil
 	}()
-}
-
-func prepareReceiveConnection(port int) *net.UDPConn {
-	rcvAddr, err := net.ResolveUDPAddr("udp", ":"+strconv.Itoa(port)) // from any address at specified port
-	handleError(err)
-	rcvConn, err := net.ListenUDP("udp", rcvAddr)
-	handleError(err)
-	return rcvConn
 }
 
 func prepareSendConnection(port int) *net.UDPConn {
@@ -174,10 +181,10 @@ func printStartedMessage(rcvPort int, sndPort int) {
 	fmt.Println("#####")
 }
 
-func printReceivedMessage(rcvFromAddr *net.UDPAddr, n int, message string) {
-	if !debugMode {
-		return
-	}
+func printReceivedMessage(rcvFromAddr net.Addr, n int, message string) {
+	// if !debugMode {
+	//     return
+	// }
 
 	fmt.Println("-----")
 	fmt.Println(time.Now())
@@ -207,5 +214,6 @@ func main() {
 
 	rcvPort, sndPort := readConfig()
 	server := &PassthroughServer{rcvPort, sndPort, nil, nil}
+	// server := &PassthroughServer{rcvPort, sndPort, nil}
 	server.Start()
 }
