@@ -15,13 +15,14 @@ PROCESSING_ROOT: "/Applications/Processing2.2.1.app/Contents/Java"  # Path for M
 
 ## Usage
 ### Inline Mode
+#### Run
 With "Inline Mode", you can directly run "ruby-processing" code on Sonic Pi.
 
 * Open Sonic Pi.
 * Include `load "[path to haskap-jam-p5.rb]/haskap-jam-p5.rb"` in the code.
-* Add 'rp5_inline_sketch' clause.
+* Include `rp5_inline_sketch` in the code.
 * Put "ruby-processing" code.
-* Run the code!
+* Run the code.
 
 ```ruby
 load "~/haskap-jam-pack/client/haskap-jam-p5/haskap-jam-p5.rb"
@@ -44,11 +45,14 @@ def draw
 end
 ```
 
+#### Stop
+Switch to "ruby-processing" sketch window (probably named 'java') and quit (cmd + q).
+
 ### Manual Mode
 You can manually run "ruby-processing" code with rp5_sketch method.
 
 ```ruby
-load "~/github/haskap-jam-pack/client/haskap-jam-p5/haskap-jam-p5.rb"
+load "~/haskap-jam-pack/client/haskap-jam-p5/haskap-jam-p5.rb"
 
 the_code = <<EOC
 def setup
@@ -100,4 +104,19 @@ live_loop :sketch do
   rp5_sketch the_2nd_code, {:full_screen => true}
   sleep 5
 end
+```
+
+#### Stop
+Add `stop_rp5_sketch` and reemove `rp5_sketch`.
+
+```ruby
+live_loop :sketch do
+  stop_rp5_sketch
+  #  rp5_sketch the_code, {:full_screen => true}
+  sleep 5
+  #  rp5_sketch the_2nd_code, {:full_screen => true}
+  sleep 5
+end
+
+
 ```
