@@ -1,11 +1,13 @@
 # ruby-processing (experimental)
 
-"ruby-processing" feature enables you to control ruby-processing visuals from Sonic Pi.
+"ruby-processing" feature enables you to control [Ruby-Processing](https://github.com/jashkenas/ruby-processing) visuals from Sonic Pi.
+
+![ruby-processing](rp5.gif)
 
 ## Requirements
 
 * Sonic Pi v2.10
-* Processing v2.2.1
+* [Processing](https://www.processing.org/) v2.2.1
 
 ## Configuration
 Set Processing2.2.1.app installed path in rp5rc file.
@@ -117,6 +119,10 @@ live_loop :sketch do
   #  rp5_sketch the_2nd_code, {:full_screen => true}
   sleep 5
 end
-
-
 ```
+
+## Note
+
+* Any errors you make on the code (for example you make typo of variable name) will cause the sketch stopped and disappeared. (This is why the feature is experimental.)
+
+* Updating "ruby-processing" code will take about 1 second to reflect the sketch window. You'd better use the '[log forwarding](https://github.com/siaflab/haskap-jam-pack#log-forwarding)' feature if your sketch requires strictly-timed responses.
