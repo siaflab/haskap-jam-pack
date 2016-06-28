@@ -12,6 +12,22 @@ import (
 
 var c chan int
 
+func prepareReceiveUDPConnection(port int) *net.UDPConn {
+	rcvAddr, err := net.ResolveUDPAddr("udp", ":"+strconv.Itoa(port)) // from any address at specified port
+	handleError(err)
+	rcvConn, err := net.ListenUDP("udp", rcvAddr)
+	handleError(err)
+	return rcvConn
+}
+
+func prepareSendTCPConnection(port int) *net.TCPConn {
+	sndToAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1"+":"+strconv.Itoa(port))
+	sndFromAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:0")
+	sndConn, err := net.DialTCP("tcp", sndFromAddr, sndToAddr)
+	handleError(err)
+	return sndConn
+}
+
 // TestServer represents a server process.
 type TestServer struct {
 	ReceivePort    int
@@ -21,7 +37,7 @@ type TestServer struct {
 
 // Start starts listening.
 func (server *TestServer) Start() {
-	server.rcvConn = prepareReceiveConnection(server.ReceivePort)
+	server.rcvConn = prepareReceiveUDPConnection(server.ReceivePort)
 	defer server.rcvConn.Close()
 
 	server.ReceiveMsgList = list.New()
@@ -94,7 +110,7 @@ func printTestServerReceivedMessage(rcvFromAddr *net.UDPAddr, message string) {
 }
 
 //// Test utils
-func setup() (*TestServer, *PassthroughServer, *net.UDPConn) {
+func setup() (*TestServer, *PassthroughServer, *net.TCPConn) {
 	testServer := &TestServer{4557, nil, nil}
 	go testServer.Start()
 	time.Sleep(50 * time.Millisecond)
@@ -104,18 +120,18 @@ func setup() (*TestServer, *PassthroughServer, *net.UDPConn) {
 	go server.Start()
 	time.Sleep(50 * time.Millisecond)
 
-	testSndConn := prepareSendConnection(4559)
+	testSndConn := prepareSendTCPConnection(4559)
 	return testServer, server, testSndConn
 }
 
-func teardown(testServer *TestServer, server *PassthroughServer, testSndConn *net.UDPConn) {
+func teardown(testServer *TestServer, server *PassthroughServer, testSndConn *net.TCPConn) {
 	defer testSndConn.Close()
 	defer server.Stop()
 	defer testServer.Stop()
 	time.Sleep(50 * time.Millisecond)
 }
 
-//// Test Cases
+// Test Cases
 func TestStart(t *testing.T) {
 	//// setup
 	testServer, server, testSndConn := setup()
@@ -161,9 +177,11 @@ func TestSend2Message(t *testing.T) {
 	//// test
 	sendBytes := []byte("val")
 	testSndConn.Write(sendBytes)
+	testSndConn.Close()
 
 	time.Sleep(50 * time.Millisecond)
 	sendBytes2 := []byte("val2")
+	testSndConn = prepareSendTCPConnection(4559)
 	testSndConn.Write(sendBytes2)
 
 	//// assert
@@ -200,9 +218,17 @@ func TestSend2MessageSimul(t *testing.T) {
 
 	//// test
 	sendBytes := []byte("val")
+	go func(sendBytes []byte) {
+		sndConn := prepareSendTCPConnection(4559)
+		sndConn.Write(sendBytes)
+		sndConn.Close()
+	}(sendBytes)
 	sendBytes2 := []byte("val2")
-	go testSndConn.Write(sendBytes)
-	go testSndConn.Write(sendBytes2)
+	go func(sendBytes []byte) {
+		sndConn := prepareSendTCPConnection(4559)
+		sndConn.Write(sendBytes)
+		sndConn.Close()
+	}(sendBytes2)
 
 	//// assert
 	for {
@@ -248,9 +274,11 @@ end`
 		go func(idx int) {
 			sendBytes := []byte(codeMsg)
 			strconv.AppendInt(sendBytes, int64(idx), 10)
-			testSndConn.Write(sendBytes)
+			sndConn := prepareSendTCPConnection(4559)
+			sndConn.Write(sendBytes)
 			sendMsgList.PushBack(sendBytes)
 			fmt.Println("Sent:", idx)
+			sndConn.Close()
 		}(i)
 	}
 
