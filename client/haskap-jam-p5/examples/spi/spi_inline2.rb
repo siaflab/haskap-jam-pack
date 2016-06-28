@@ -1,10 +1,9 @@
 # Welcome to Sonic Pi v2.10
 
 load "~/github/haskap-jam-pack/client/haskap-jam-p5/haskap-jam-p5.rb"
-#set_use_pty(true)
 rp5_inline_sketch({:full_screen => true})
 
-SCALE = 5
+SCALE = 50
 COLOR_RANGE = 16581375 # 255 * 255 * 255
 
 attr_reader :grid
@@ -16,17 +15,13 @@ def setup
 end
 
 def draw
+  background 0
   grid.load_pixels
   cols = width/SCALE
   rows = grid.pixels.length / cols
   rows.times do |i|
-    c = rand(COLOR_RANGE)
-    ##| c = rand(COLOR_RANGE / 2) + COLOR_RANGE / 2
-    ##| c = rand(COLOR_RANGE / 5)
     cols.times do |j|
-      ##| c = rand(COLOR_RANGE)
-      ##| c = rand(COLOR_RANGE / 2) + COLOR_RANGE / 2
-      ##| c = rand(COLOR_RANGE / 5)
+      c = rand COLOR_RANGE
       grid.pixels[cols * i + j] = c
     end
   end
