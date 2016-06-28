@@ -40,18 +40,17 @@ module HaskapJam
       end
 
       def send(pattern, *args)
+        so = TCPSocket.new(@host, @port)
         msg = @encoder.encode_single_message(pattern, args)
         so.send(msg, 0)
+        so.close
       end
 
       def send_ts(ts, pattern, *args)
+        so = TCPSocket.new(@host, @port)
         msg = @encoder.encode_single_bundle(ts, pattern, args)
         so.send(msg, 0)
-      end
-
-      def close
         so.close
-        @so = nil
       end
 
       def to_s
@@ -60,18 +59,6 @@ module HaskapJam
 
       def inspect
         to_s
-      end
-
-      def so
-        while(!@so) do
-          begin
-            @so = TCPSocket.new(@host, @port)
-          rescue Errno::ECONNREFUSED => e
-            puts "Waiting for OSC server..."
-            sleep(1)
-          end
-        end
-        @so
       end
 
     end

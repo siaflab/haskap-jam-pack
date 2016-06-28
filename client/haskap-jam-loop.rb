@@ -83,13 +83,7 @@ def jam_loop(_loop_symbol, &proc)
   puts "remote_code: #{remote_code}"
 
   # send code to remote sonic pi
-  if $jam_loop_client.nil?
-    puts 'creating TCPClient...'
-    client = HaskapJam::OSC::TCPClient.new(remote_address, remote_port, use_encoder_cache: true)
-    $jam_loop_client = client
-  else
-    client = $jam_loop_client
-  end
+  client = HaskapJam::OSC::TCPClient.new(remote_address, remote_port, use_encoder_cache: true)
   client_id = "haskap-client-#{local_addr}"
   log_debug "client_id: #{client_id}"
   buffer_id = "haskap-buffer-#{local_addr}-#{workspace_id}"
@@ -97,5 +91,5 @@ def jam_loop(_loop_symbol, &proc)
   workspace = "haskap-workspace-#{local_addr}-#{workspace_id}"
   log_debug "workspace: #{workspace}"
   client.send('/save-and-run-buffer', client_id, buffer_id, remote_code, workspace)
-  client.close
+  log_debug "done."
 end
