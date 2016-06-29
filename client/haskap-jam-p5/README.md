@@ -8,6 +8,7 @@
 
 * Sonic Pi v2.10
 * [Processing](https://www.processing.org/) v2.2.1
+* jdk8 from Oracle (latest version preferred, or required by Mac)
 
 ## Configuration
 Set Processing2.2.1.app installed path in rp5rc file.
@@ -23,7 +24,7 @@ With "Inline Mode", you can directly run "ruby-processing" code on Sonic Pi.
 * Open Sonic Pi.
 * Include `load "[path to haskap-jam-p5.rb]/haskap-jam-p5.rb"` in the code.
 * Include `rp5_inline_sketch` in the code.
-* Put "ruby-processing" code.
+* Put "Ruby-Processing" code.
 * Run the code.
 
 ```ruby
@@ -51,7 +52,7 @@ end
 Switch to "ruby-processing" sketch window (probably named 'java') and quit (cmd + q).
 
 ### Manual Mode
-You can manually run "ruby-processing" code with rp5_sketch method.
+You can manually run "Ruby-Processing" code with `rp5_sketch` method.
 
 ```ruby
 load "~/haskap-jam-pack/client/haskap-jam-p5/haskap-jam-p5.rb"
@@ -123,6 +124,8 @@ end
 
 ## Note
 
-* Any errors you make on the code (for example you make typo of variable name) will cause the sketch stopped and disappeared. (This is why the feature is experimental.)
+* Any errors you make on the code (for example you make a typo of variable name) will cause the sketch stopped and disappeared. (This is why the feature is experimental.)
 
-* Updating "ruby-processing" code will take about 1 second to reflect the sketch window. You'd better use the '[log forwarding](https://github.com/siaflab/haskap-jam-pack#log-forwarding)' feature if your sketch requires strictly-timed responses.
+* Starting "Ruby-Processing" sketch will take about 10 seconds.
+
+* Updating "Ruby-Processing" code will take about 1 second to reflect the sketch window. You'd better use the '[log forwarding](https://github.com/siaflab/haskap-jam-pack#log-forwarding)' feature if your sketch requires strictly-timed responses.

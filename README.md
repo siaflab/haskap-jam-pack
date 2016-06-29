@@ -2,7 +2,7 @@
 <img src="haskap.png" alt="Haskap painting" title="Haskap" align="right" />
 
 ## Introduction
-Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). This package adds the following three features to Sonic Pi.
+Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). This package adds the following features to Sonic Pi.
 
 * jam session
 * robot voice
