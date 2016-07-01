@@ -126,6 +126,4 @@ end
 
 * Any errors you make on the code (for example you make a typo of variable name) will cause the sketch stopped and disappeared. (This is why the feature is experimental.)
 
-* Starting "Ruby-Processing" sketch will take about 10 seconds.
-
-* Updating "Ruby-Processing" code will take about 1 second to reflect the sketch window. You'd better use the '[log forwarding](https://github.com/siaflab/haskap-jam-pack#log-forwarding)' feature if your sketch requires strictly-timed responses.
+* Starting "Ruby-Processing" sketch will take about 10 seconds and updating "Ruby-Processing" code will take about 1 second to reflect the sketch window. You'd better use the '[log forwarding](https://github.com/siaflab/haskap-jam-pack#log-forwarding)' feature if your sketch requires strictly-timed responses.
