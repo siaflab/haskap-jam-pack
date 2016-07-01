@@ -1,7 +1,8 @@
 #!/bin/sh
 
 #BUILD_VERSION=`git describe --always --dirty`
-BUILD_VERSION=0.4.0
+version=`cat ../../version.txt`
+BUILD_VERSION=$version
 echo BUILD_VERSION: $BUILD_VERSION
 BUILD_DATE=`date +%FT%T%z`
 echo BUILD_DATE: $BUILD_DATE
