@@ -5,7 +5,7 @@ all:
 
 .PHONY: run
 run:
-	go run spi-ping.go
+	go run test-client.go
 
 # .PHONY: test
 # test:
