@@ -2,14 +2,14 @@
 <img src="haskap.png" alt="Haskap painting" title="Haskap" align="right" />
 
 ## Introduction
-Haskap Jam Pack is an extension package for [Sonic Pi]( http://sonic-pi.net). This package adds the following features to Sonic Pi.
+Haskap Jam Pack is an extension package for [Sonic Pi](http://sonic-pi.net). This package adds the following features to Sonic Pi.
 
 * jam session
 * robot voice
 * log forwarding
 * ruby-processing (experimental)
 
-This project is originally started at [SIAF LAB](http://www.sapporo-internationalartfestival.jp/siaflab/sonic-jam-pi/) by @keikomachiya as a stand alone application named "Hascap Jam Pi" in 2015 and re-written as an extension package by @kn1kn1.
+This project is originally started at [SIAF LAB](http://siaf.jp/siaflab/) by @keikomachiya as a stand alone application named "Hascap Jam Pi" in 2015 and re-written as an extension package by @kn1kn1.
 
 ## Requirements
 Sonic Pi v2.10
@@ -55,25 +55,25 @@ $ cd server/jam-server; ./bin/darwin_amd64/haskap-jam-server -d
 config.ReceivePort: 4559
 config.SocicPiPort: 4557
 #####
-2016-02-27 12:15:01.93834047 +0900 JST
+2016-09-29 22:37:04.992052926 +0900 JST
 haskap-jam-server started successfully.
-version: 0.1.0-alpha1, build: 06f72ff, date:2016-02-25T16:10:43+0900
-listening to udp 4559
+version: 0.4.1, build: ff52992, date:2016-09-29T22:35:50+0900
+listening to tcp 4559
 and will send to udp 4557
 #####
 -----
-2016-02-27 12:17:30.767371905 +0900 JST
-Received from: 127.0.0.1:56826
-size: 176
-# Welcome to Sonic Pi v2.9
+2016-09-29 22:39:05.555434042 +0900 JST
+Received from: 127.0.0.1:51792
+size: 264
+/save-and-run-buffer,sssshaskap-client-192.168.11.8haskap-buffer-192.168.11.8-zero# Welcome to Sonic Pi v2.10
 
 #load "~/github/haskap-jam-pack/client/haskap-jam-loop.rb"
 
-jam_loop :test do
-sample :perc_bell, rate: rrand(-1.5, 1.5)
-sleep rrand(0.1, 2)
-stop
+live_loop :test do
+  play 60
+  sleep 0.5
 end
+haskap-workspace-192.168.11.8-zero
 
 (snip)
 ```
@@ -86,7 +86,6 @@ end
 load "~/haskap-jam-pack/client/haskap-jam-loop.rb"
 
 jam_loop :test do
-  sync :foo
   play 60
   sleep 0.5
 end
