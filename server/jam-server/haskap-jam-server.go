@@ -176,7 +176,7 @@ func printStartedMessage(rcvPort int, sndPort int) {
 	fmt.Println(time.Now())
 	fmt.Println("haskap-jam-server started successfully.")
 	fmt.Println("version: " + BuildVersion + ", build: " + GitCommit + ", date:" + BuildDate)
-	fmt.Println("listening to udp", rcvPort)
+	fmt.Println("listening to tcp", rcvPort)
 	fmt.Println("and will send to udp", sndPort)
 	fmt.Println("#####")
 }
