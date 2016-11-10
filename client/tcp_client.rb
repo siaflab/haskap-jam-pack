@@ -25,6 +25,7 @@
 #  and https://github.com/samaaron/sonic-pi/blob/v2.10.0/app/server/sonicpi/lib/sonicpi/osc/udp_client.rb
 
 require 'socket'
+require_relative 'oscencode.rb'
 
 module HaskapJam
   module OSC
