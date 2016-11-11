@@ -12,7 +12,7 @@ Haskap Jam Pack is an extension package for [Sonic Pi](http://sonic-pi.net). Thi
 This project is originally started at [SIAF LAB](http://siaf.jp/siaflab/) by @keikomachiya as a stand alone application named "Hascap Jam Pi" in 2015 and re-written as an extension package by @kn1kn1.
 
 ## Requirements
-Sonic Pi v2.10
+Sonic Pi v2.11 or v2.10
 
 ## Installation
 Download zip file from [Release Page](https://github.com/siaflab/haskap-jam-pack/releases/) and extract it.
